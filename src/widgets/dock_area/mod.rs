@@ -573,7 +573,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                     tab_viewer.title(&mut tabs[tab_index.0]),
                     tab_style.unwrap_or(style.tab.clone()),
                     tab_viewer.closeable(&mut tabs[tab_index.0]),
-                    tab_viewer.title_image(&mut tabs[tab_index.0])
+                    tab_viewer.title_image(&mut tabs[tab_index.0], tabs_ui)
                 )
             };
 

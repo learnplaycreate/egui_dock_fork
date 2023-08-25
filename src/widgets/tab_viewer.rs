@@ -22,7 +22,7 @@ pub trait TabViewer {
     /// an optoinal image that will be used in the title
     /// 
     /// this will retrun none if not implemented
-    fn title_image(&mut self, tab: &mut Self::Tab) -> Option<Image>{
+    fn title_image(&mut self, _tab: &mut Self::Tab, _ui: &mut Ui) -> Option<Image>{
         None
     }
 
