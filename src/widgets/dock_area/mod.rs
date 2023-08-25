@@ -907,7 +907,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
 
         let close_response = show_close_button.then(|| {
             let mut close_button_rect = rect;
-            close_button_rect.set_left(text_rect.right()); // + image_rect.right()
+            close_button_rect.set_left(text_rect.right() + image_width); // + image_rect.right()
             close_button_rect =
                 Rect::from_center_size(close_button_rect.center(), Vec2::splat(close_button_size));
 
