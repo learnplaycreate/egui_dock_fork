@@ -894,9 +894,14 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                 rect.center().y - 0.5 * text_rect.size().y,
             )
         } else {
-            ui.layout()
-                .align_size_within_rect(text_rect.size(), text_rect.shrink2(vec2(x_spacing, 0.0)))
-                .min
+            let mut pos =
+                Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
+                pos -= galley.size() / 2.0;
+                pos
+            
+            // ui.layout()
+            //     .align_size_within_rect(text_rect.size(), text_rect.shrink2(vec2(x_spacing, 0.0)))
+            //     .min
         };
 
         // let text_pos : Pos2;
