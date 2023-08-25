@@ -890,7 +890,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
             let mut pos =
                 Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
             pos -= galley.size() / 2.0;
-            pos.x += image_width;
+            //pos.x += image_width;
             pos
         };
 
