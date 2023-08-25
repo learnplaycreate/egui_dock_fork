@@ -891,13 +891,12 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
             let icon_spacing = ui.spacing().icon_spacing;
             let mut pos =
                 Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
+            pos.y -= galley.size().y / 2.0;
             pos.x = rect.min.x + image_width + icon_spacing;
             pos
-            
-            
             // pos2(
             //     rect.min.x + image_width + icon_spacing,
-            //     rect.center().y - 0.5 * text_rect.size().y,
+            //     rect.center().y, // - 0.5 * text_rect.size().y,
             // )
         } else {
             let mut pos =
