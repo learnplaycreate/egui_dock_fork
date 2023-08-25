@@ -14,7 +14,6 @@ use egui::{
     containers::*, emath::*, epaint::*, layers::*, Context, CursorIcon, Id, Layout, Response,
     Sense, TextStyle, Ui, WidgetText, Image,
 };
-use egui_extras::RetainedImage;
 use hover_data::HoverData;
 use paste::paste;
 use state::State;
@@ -891,7 +890,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
             let mut pos =
                 Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
             pos -= galley.size() / 2.0;
-            pos.x += image_rect.width();
+            pos.x += image_width;
             pos
         };
 
