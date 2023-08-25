@@ -814,7 +814,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
         let text_width = galley.size().x + 2.0 * x_spacing;
         let image_width: f32;
         if let Some(image) = title_image{
-            image_width = image.size().x + x_spacing
+            image_width = image.size().x + ui.spacing().icon_spacing
         }else{
             image_width = 0.;
         }
@@ -898,6 +898,19 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                 .align_size_within_rect(text_rect.size(), text_rect.shrink2(vec2(x_spacing, 0.0)))
                 .min
         };
+
+        // let text_pos : Pos2;
+        // if let Some(_) = title_image{
+
+        // }else{
+        //     let text_pos = {
+        //         let mut pos =
+        //             Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
+        //         pos -= galley.size() / 2.0;
+        //         pos
+        //     };
+        // }
+        
 
         let override_text_color = (!galley.galley_has_color).then_some(tab_style.text_color);
 
