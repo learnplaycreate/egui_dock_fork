@@ -886,13 +886,32 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
         let mut text_rect = rect;
         text_rect.set_width(tab_width - close_button_size - image_width);
 
-        let text_pos = {
-            let mut pos =
-                Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
-            pos -= galley.size() / 2.0;
-            //pos.x += image_width;
-            pos
+
+        let text_pos = if let Some(_) = title_image {
+            let icon_spacing = ui.spacing().icon_spacing;
+            pos2(
+                rect.min.x + button_padding.x + image.size().x + icon_spacing,
+                rect.center().y - 0.5 * text.size().y,
+            )
+        } else {
+            ui.layout()
+                .align_size_within_rect(text.size(), rect.shrink2(button_padding))
+                .min
         };
+
+
+        let text_pos : Pos2;
+        if let Some(_) = title_image{
+
+        }else{
+            let text_pos = {
+                let mut pos =
+                    Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
+                pos -= galley.size() / 2.0;
+                pos
+            };
+        }
+        
 
         let override_text_color = (!galley.galley_has_color).then_some(tab_style.text_color);
 
