@@ -1,5 +1,6 @@
 use crate::{NodeIndex, TabStyle};
-use egui::{Id, Ui, WidgetText};
+use egui::{Id, Ui, WidgetText, Image};
+use egui_extras::RetainedImage;
 
 /// Defines how to display a tab inside a [`Tree`](crate::Tree).
 pub trait TabViewer {
@@ -17,6 +18,13 @@ pub trait TabViewer {
 
     /// The title to be displayed.
     fn title(&mut self, tab: &mut Self::Tab) -> WidgetText;
+
+    /// an optoinal image that will be used in the title
+    /// 
+    /// this will retrun none if not implemented
+    fn title_image(&mut self, tab: &mut Self::Tab) -> Option<Image>{
+        None
+    }
 
     /// Unique id for this tab.
     ///

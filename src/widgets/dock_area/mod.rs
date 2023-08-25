@@ -12,8 +12,9 @@ use crate::{
 use duplicate::duplicate;
 use egui::{
     containers::*, emath::*, epaint::*, layers::*, Context, CursorIcon, Id, Layout, Response,
-    Sense, TextStyle, Ui, WidgetText,
+    Sense, TextStyle, Ui, WidgetText, Image,
 };
+use egui_extras::RetainedImage;
 use hover_data::HoverData;
 use paste::paste;
 use state::State;
@@ -563,7 +564,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                 tabs_ui.output_mut(|o| o.cursor_icon = CursorIcon::Grabbing);
             }
 
-            let (is_active, label, tab_style, closeable) = {
+            let (is_active, label, tab_style, closeable, label_image) = {
                 let Node::Leaf { tabs, active, .. } = &mut self.tree[node_index] else { unreachable!() };
                 let style = self.style.as_ref().unwrap();
                 let tab_style = tab_viewer.tab_style_override(&tabs[tab_index.0], &style.tab);
@@ -572,6 +573,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                     tab_viewer.title(&mut tabs[tab_index.0]),
                     tab_style.unwrap_or(style.tab.clone()),
                     tab_viewer.closeable(&mut tabs[tab_index.0]),
+                    tab_viewer.title_image(&mut tabs[tab_index.0])
                 )
             };
 
@@ -591,6 +593,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                             is_being_dragged,
                             prefered_width,
                             show_close_button,
+                            label_image, 
                         )
                     })
                     .response;
@@ -622,6 +625,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
                     is_being_dragged,
                     prefered_width,
                     show_close_button,
+                    label_image
                 );
 
                 let (close_hovered, close_clicked) = close_response
@@ -803,11 +807,18 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
         is_being_dragged: bool,
         prefered_width: Option<f32>,
         show_close_button: bool,
+        title_image: Option<Image>
     ) -> (Response, Option<Response>) {
         let style = self.style.as_ref().unwrap();
         let galley = label.into_galley(ui, None, f32::INFINITY, TextStyle::Button);
         let x_spacing = 8.0;
         let text_width = galley.size().x + 2.0 * x_spacing;
+        let image_width: f32;
+        if let Some(image) = title_image{
+            image_width = image.size().x + x_spacing
+        }else{
+            image_width = 0.;
+        }
         let close_button_size = if show_close_button {
             Style::TAB_CLOSE_BUTTON_SIZE.min(style.tab_bar.height)
         } else {
@@ -818,7 +829,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
         let minimum_width = tab_style
             .minimum_width
             .unwrap_or(0.0)
-            .at_least(text_width + close_button_size);
+            .at_least(text_width + close_button_size + image_width);
         let tab_width = prefered_width.unwrap_or(0.0).at_least(minimum_width);
 
         let (rect, mut response) =
@@ -859,8 +870,22 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
             );
         }
 
+        let mut image_rect = rect;
+        image_rect.set_width(tab_width - text_width - close_button_size);
+        if let Some(image) = title_image {
+            let image_rect = Rect::from_min_size(
+                pos2(
+                    rect.min.x + image.size().x,
+                    image_rect.center().y - 0.5 - (image.size().y / 2.0),
+                ),
+                image.size(),
+            );
+            image.paint_at(ui, image_rect);
+        }
+
+
         let mut text_rect = rect;
-        text_rect.set_width(tab_width - close_button_size);
+        text_rect.set_width(tab_width - close_button_size - image_width);
 
         let text_pos = {
             let mut pos =
