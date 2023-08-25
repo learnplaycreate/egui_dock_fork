@@ -875,7 +875,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
         if let Some(image) = title_image {
             let image_rect = Rect::from_min_size(
                 pos2(
-                    rect.min.x + image.size().x,
+                    rect.min.x,
                     image_rect.center().y - 0.5 - (image.size().y / 2.0),
                 ),
                 image.size(),
@@ -891,6 +891,7 @@ impl<'tree, Tab> DockArea<'tree, Tab> {
             let mut pos =
                 Align2::CENTER_CENTER.pos_in_rect(&text_rect.shrink2(vec2(x_spacing, 0.0)));
             pos -= galley.size() / 2.0;
+            pos.x += image_rect.width();
             pos
         };
 
